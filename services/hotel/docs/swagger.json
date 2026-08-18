@@ -1,0 +1,65 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Hotel microservice.",
+        "title": "Booking project",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/hotels/hotel/{id}": {
+            "get": {
+                "description": "Get hotel information by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "hotels"
+                ],
+                "summary": "Get hotel by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Hotel ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Hotel"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "domain.Hotel": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "stars": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

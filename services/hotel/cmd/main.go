@@ -7,8 +7,19 @@ import (
 	"hotel/internal/infrastructure/server"
 	"log"
 	"os"
+
+	_ "hotel/docs"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @title           Booking project
+// @version         1.0
+// @description     Hotel microservice.
+
+// @host      localhost:8080
+// @BasePath  /api/v1
 func main() {
 	profile := ""
 	if len(os.Args) > 1 {
@@ -24,7 +35,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	handler := handlers.InitHandlers()
+	db, err := database.NewPostgresDB(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	handler := handlers.Init(db)
+	handler.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	srv := server.Server{}
 	if err = srv.Run(8080, handler); err != nil {

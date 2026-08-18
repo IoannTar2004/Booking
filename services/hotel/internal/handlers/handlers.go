@@ -1,11 +1,22 @@
 package handlers
 
-import "github.com/gin-gonic/gin"
+import (
+	"hotel/internal/infrastructure/database"
+	"hotel/internal/services"
 
-func InitHandlers() *gin.Engine {
+	"github.com/gin-gonic/gin"
+	"github.com/jmoiron/sqlx"
+)
+
+func Init(db *sqlx.DB) *gin.Engine {
 	router := gin.Default()
-	hotel := router.Group("/hotels")
-	hotel.GET("/hotel/:id", getHotelById)
+
+	hotelRepo := database.NewHotelRepository(db)
+	hotelService := services.NewHotelService(hotelRepo)
+	hotelHandler := NewHotelHandler(hotelService)
+
+	hotel := router.Group("/api/v1/hotels")
+	hotel.GET("/hotel/:id", hotelHandler.GetHotelById)
 
 	return router
 }
