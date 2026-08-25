@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"hotel/internal/domain"
 	"hotel/internal/repositories"
 
@@ -57,4 +58,33 @@ func (h *HotelRepository) GetAll(filter domain.GetHotelsRequest) ([]domain.Hotel
 	}
 
 	return hotels, nil
+}
+
+func (h *HotelRepository) Create(hotel domain.CreateHotelRequest) (domain.ID, error) {
+	query := `
+		INSERT INTO hotels (name, city_id, address, stars) 
+		VALUES ($1, (SELECT id FROM cities WHERE cities.name = $2), $3, $4)
+		RETURNING id
+		`
+
+	var hotelId domain.ID
+	args := []interface{}{hotel.Name, hotel.City, hotel.Address, hotel.Stars}
+	err := h.db.QueryRowx(query, args...).Scan(&hotelId)
+	if err != nil {
+		return 0, err
+	}
+
+	return hotelId, nil
+}
+
+func (h *HotelRepository) Update(id domain.ID, hotel domain.CreateHotelRequest) error {
+	query := `
+		UPDATE hotels SET name = $1, city_id = (SELECT id FROM cities WHERE cities.name = $2),
+	    address = $3, stars = $4 WHERE id = $5
+	`
+	args := []interface{}{hotel.Name, hotel.City, hotel.Address, hotel.Stars, id}
+	rows, err := h.db.Exec(query, args...)
+	fmt.Println(rows)
+
+	return err
 }

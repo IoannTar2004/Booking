@@ -77,7 +77,82 @@ const docTemplate = `{
                 }
             }
         },
-        "/hotels/hotel/{id}": {
+        "/hotels/create": {
+            "post": {
+                "description": "Add new hotel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Add new hotel",
+                "parameters": [
+                    {
+                        "description": "Hotel data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.CreateHotelRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Hotel"
+                        }
+                    }
+                }
+            }
+        },
+        "/hotels/update/{id}": {
+            "put": {
+                "description": "Update hotel information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Update hotel information",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Hotel ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Hotel data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.CreateHotelRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/hotels/{id}": {
             "get": {
                 "description": "Get hotel information by ID",
                 "consumes": [
@@ -111,6 +186,34 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "domain.CreateHotelRequest": {
+            "type": "object",
+            "required": [
+                "address",
+                "city",
+                "name",
+                "stars"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "city": {
+                    "type": "string",
+                    "maxLength": 32
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 64
+                },
+                "stars": {
+                    "type": "integer",
+                    "maximum": 7,
+                    "minimum": 0
+                }
+            }
+        },
         "domain.Hotel": {
             "type": "object",
             "properties": {

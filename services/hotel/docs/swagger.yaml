@@ -1,5 +1,26 @@
 basePath: /api/v1
 definitions:
+  domain.CreateHotelRequest:
+    properties:
+      address:
+        maxLength: 100
+        type: string
+      city:
+        maxLength: 32
+        type: string
+      name:
+        maxLength: 64
+        type: string
+      stars:
+        maximum: 7
+        minimum: 0
+        type: integer
+    required:
+    - address
+    - city
+    - name
+    - stars
+    type: object
   domain.Hotel:
     properties:
       address:
@@ -20,6 +41,27 @@ info:
   title: Booking project
   version: "1.0"
 paths:
+  /hotels/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get hotel information by ID
+      parameters:
+      - description: Hotel ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Hotel'
+      summary: Get hotel by ID
+      tags:
+      - Users
   /hotels/all:
     get:
       consumes:
@@ -62,25 +104,53 @@ paths:
       summary: Get list of hotels
       tags:
       - Users
-  /hotels/hotel/{id}:
-    get:
+  /hotels/create:
+    post:
       consumes:
       - application/json
-      description: Get hotel information by ID
+      description: Add new hotel
+      parameters:
+      - description: Hotel data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.CreateHotelRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.Hotel'
+      summary: Add new hotel
+      tags:
+      - Admin
+  /hotels/update/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Update hotel information
       parameters:
       - description: Hotel ID
         in: path
         name: id
         required: true
         type: integer
+      - description: Hotel data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.CreateHotelRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.Hotel'
-      summary: Get hotel by ID
+            type: string
+      summary: Update hotel information
       tags:
-      - Users
+      - Admin
 swagger: "2.0"
