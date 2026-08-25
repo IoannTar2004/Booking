@@ -4,4 +4,5 @@ import "hotel/internal/domain"
 
 type Hotel interface {
 	GetById(id int64) (*domain.Hotel, error)
+	GetAll(filter domain.GetHotelsRequest) ([]domain.Hotel, error)
 }

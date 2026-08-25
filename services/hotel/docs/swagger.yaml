@@ -4,8 +4,9 @@ definitions:
     properties:
       address:
         type: string
+      city:
+        type: string
       id:
-        format: int64
         type: integer
       name:
         type: string
@@ -19,6 +20,48 @@ info:
   title: Booking project
   version: "1.0"
 paths:
+  /hotels/all:
+    get:
+      consumes:
+      - application/json
+      description: Get list of hotels
+      parameters:
+      - description: Hotel name
+        in: query
+        name: name
+        type: string
+      - description: City location
+        in: query
+        name: city
+        type: string
+      - description: Stars
+        in: query
+        name: stars
+        type: integer
+      - default: 5
+        description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - default: 0
+        description: Offset
+        in: query
+        name: offset
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Hotel'
+            type: array
+      summary: Get list of hotels
+      tags:
+      - Users
   /hotels/hotel/{id}:
     get:
       consumes:
@@ -39,5 +82,5 @@ paths:
             $ref: '#/definitions/domain.Hotel'
       summary: Get hotel by ID
       tags:
-      - hotels
+      - Users
 swagger: "2.0"

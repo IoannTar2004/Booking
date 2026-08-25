@@ -17,6 +17,7 @@ func Init(db *sqlx.DB) *gin.Engine {
 
 	hotel := router.Group("/api/v1/hotels")
 	hotel.GET("/hotel/:id", hotelHandler.GetHotelById)
+	hotel.GET("/all", hotelHandler.GetHotels)
 
 	return router
 }

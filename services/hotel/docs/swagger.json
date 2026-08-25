@@ -9,6 +9,68 @@
     "host": "localhost:8080",
     "basePath": "/api/v1",
     "paths": {
+        "/hotels/all": {
+            "get": {
+                "description": "Get list of hotels",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get list of hotels",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Hotel name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "City location",
+                        "name": "city",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Stars",
+                        "name": "stars",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 5,
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 0,
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Hotel"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/hotels/hotel/{id}": {
             "get": {
                 "description": "Get hotel information by ID",
@@ -19,7 +81,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "hotels"
+                    "Users"
                 ],
                 "summary": "Get hotel by ID",
                 "parameters": [
@@ -49,9 +111,11 @@
                 "address": {
                     "type": "string"
                 },
+                "city": {
+                    "type": "string"
+                },
                 "id": {
-                    "type": "integer",
-                    "format": "int64"
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
